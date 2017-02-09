@@ -1,0 +1,211 @@
+@charset "utf-8";
+
+/* cover gradeint */
+@mixin cover-gradient($color-start, $color-stops, $opacity) {
+  background: $color-start;
+  background: linear-gradient(to right, $color-start 80%, $color-stops 100%);
+  opacity: $opacity;
+}
+
+/* variables */
+$accentColor: #1abc9c;
+$containerColor: #9b59b6;
+
+@import "scss/normalize";
+
+body {
+  font-family: 'Roboto Mono', monospace;
+  transition: 1s;
+}
+
+main {
+  background-color: #ffffff;
+  transition: all 1s;
+  height: 100%;
+}
+
+/* header */
+.header {
+  position: relative;
+  height: 45vh;
+  width: 100%;
+  background-image: url('../img/header.jpg');
+  background-position: center;
+  background-size: cover;
+  z-index: 2;
+  &::after {
+    content: "";
+    display: block;
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    @include cover-gradient($accentColor, transparent, .3);
+  }
+  &__btn {
+    cursor: pointer;
+    z-index: 2;
+    position: absolute;
+    right: 30px;
+    bottom: -32px;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background-color: $accentColor;
+    box-shadow: 0px 0px 25px -2px rgba(5,52,43,1);
+    transition: .2s;
+    &:hover {
+      box-shadow: 0px 0px 35px 3px rgba(5,52,43,1);
+    }
+    &--cross {
+      display: block;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translateY(-50%) translateX(-50%);
+      width: 30px;
+      height: 2px;
+      background-color: #ffffff;
+      &::after {
+        content: "";
+        display: block;
+        width: inherit;
+        height: inherit;
+        background-color: inherit;
+        transform: rotate(90deg);
+      }
+    }
+  }
+}
+
+/* todo */
+.todo {
+  &__list {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+  }
+  &__item {
+    color: #34495e;
+    cursor: pointer;
+    width: 98%;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 24px;
+    font-weight: 300;
+    padding: 5% 0 5% 2%;
+    &:nth-child(even) {
+      background: #ecf0f1;
+      width: 98%;
+    }
+    &--checked {
+      position: relative;
+      display: inline-block;
+      margin-right: 5%;
+      margin-left: 5%;
+      width: 0;
+      height: 2px;
+      opacity: 0;
+      background-color: $accentColor;
+      transform: rotate(0);
+      transition: all .2s cubic-bezier(.17,.67,.83,.67);
+      &::after {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 17px;
+        height: 2px;
+        background-color: inherit;
+        transform: rotate(90deg) translateY(-8px) translateX(8px);
+      }
+      &-done {
+        transform: rotate(480deg);
+        width: 30px;
+        opacity: 1;
+      }
+    }
+    &:hover &--checked {
+      transform: rotate(480deg);
+      width: 30px;
+      opacity: 1;
+    }
+    &--done {
+      color: $accentColor;
+      text-decoration: line-through;
+    }
+  }
+}
+
+.overlay {
+	position: fixed;
+	z-index: 2;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100vh;
+	background: #1C1D21;
+	opacity: 0;
+	visibility: hidden;
+	transition: all .5s;
+}
+
+.todoInput {
+  z-index: 3;
+  position: absolute;
+  top: 5%;
+  opacity: 0;
+  visibility: hidden;
+  width: 100%;
+  transition: all 1s;
+  &__heading {
+    color: #fff;
+    text-align: center;
+  }
+  &__form {
+    margin-left: 5%;
+    margin-right: 5%;
+    input {
+      display: block;
+      width: 90%;
+      margin: 0 auto;
+      padding: 2% 0 2% 0;
+      &:focus {
+        outline: none;
+      }
+    }
+    button {
+      cursor: pointer;
+      display: block;
+      width: 50%;
+      margin: 0 auto;
+      margin-top: 5%;
+      padding: 2%;
+      background-color: $accentColor;
+      outline: none;
+      border: none;
+      color: #fff;
+      text-transform: uppercase;
+      transition: 0.2s;
+      &:active {
+        padding: 3%;
+      }
+    }
+  }
+}
+
+body.open {
+  & .overlay {
+    opacity: .5;
+    visibility: visible;
+  }
+  & .todoInput {
+    opacity: 1;
+    visibility: visible;
+  }
+  & main {
+    transform: scale(.9) translateY(27vh);
+  }
+}
